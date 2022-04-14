@@ -1,26 +1,25 @@
 icalstr = """BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:{publisher}
-METHOD:{method}
 BEGIN:VEVENT
 UID:123456789@example.com
 LOCATION:{location}
 SUMMARY:{summary}
 DESCRIPTION:{description}
 CLASS:{cls}
-DTSTART:{dtstart}
-DTEND:{dtend}
-DTSTAMP:{dtstamp}
+DTSTART:{start}
+DTEND:{end}
+DTSTAMP:{stamp}
 END:VEVENT
 END:VCALENDAR"""
 
 
-def fill_icalstr(dtstart, dtend, dtstamp, summary, publisher, method="PUBLISH", location=None, description=None, cls="PUBLIC", rule=None):
+def fill_icalstr(start, end, stamp, summary, publisher, method="PUBLISH", location=None, description=None, cls="PUBLIC", rule=None):
     """
     Fills icalstr with event information.
-    @param dtstart: start time of event
-    @param dtend: end time of event
-    @param dtstamp: timestamp of publication
+    @param start: start time of event
+    @param end: end time of event
+    @param stamp: timestamp of publication
     @param summary: Summary of event (that occurs as its name in calendar)
 
     @param publisher: App or Name that published the event. (seperated by //)
@@ -39,51 +38,18 @@ def fill_icalstr(dtstart, dtend, dtstamp, summary, publisher, method="PUBLISH", 
     if not location:
         location = ""
 
-    ficalstr = icalstr.format(
+    finalstr = icalstr.format(
         publisher=publisher,
-        method=method,
         location=location,
         summary=summary,
         description=description,
         cls=cls,
-        dtstart=dtstart,
-        dtend=dtend,
-        dtstamp=dtstamp,
+        start=start,
+        end=end,
+        stamp=stamp,
         rrule=rrule)
-    return ficalstr
+    return finalstr
 
-
-def make_event_str(self, name, start, end, rule=None):
-    tstamp = dt.now(tz=timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    start_utc = start.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    end_utc = end.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    _id = hashlib.sha1(bytes(tstamp+name, 'utf-8')).hexdigest()
-    if rule is not None:
-        rrule = "FREQ={}\n".format(rule)
-    else:
-        rrule = ""
-    s = """BEGIN:VCALENDAR
-    VERSION:2.0
-    PRODID:-//Sabre//Sabre VObject 4.3.0//EN
-    BEGIN:VEVENT
-    UID:{}
-    DTSTAMP:{}
-    DTSTART:{}
-    DTEND:{}
-    {}SUMMARY:{}
-    END:VEVENT
-    END:VCALENDAR
-    """.format(_id, tstamp, start_utc, end_utc, rrule, name)
-    return ''.join(s.split('\t'))
-
-
-def makeEvent(self, calendarObj, start, end, name, rule=None, owner='your'):
-    eventString = self.makeEventString(name, start, end, rule=rule)
-    try:
-        _ = calendarObj.save_event(eventString)
-
-    except Exception as e:
-        self.log.error(e)
 
 # if __name__ == "__main__()":
 # publisher, method, location, summary, description, cls, dtstart, dtend, dtstamp, rule=None

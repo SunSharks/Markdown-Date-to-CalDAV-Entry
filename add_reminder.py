@@ -1,39 +1,38 @@
 
 from datetime import datetime, timedelta, time
 import caldav
-from helpers import *
-from pw import url
+from ical_helpers import *
+import pw
 
-# Variables
-today = datetime.combine(datetime.today(), time(0, 0))
 
 # Main
-# client = caldav.DAVClient(url=url, username=username, password=password)
-client = caldav.DAVClient(url)
-principal = client.principal()
+# client = caldav.DAVClient(url=pw.url, username=username, password=password)
+# try:
+#     client = caldav.DAVClient(pw.url + pw.calendar_name + "/")
+# except caldav.lib.error.AuthorizationError:
+
+
+if pw.create_new_calendar:
+    client = caldav.DAVClient(pw.url)
+    principal = client.principal()
+    calendars = principal.calendars()
+
+    calendar = create_new_calendar(principal, pw.calendar_name)
+
+else:
+    client = caldav.DAVClient(pw.url + pw.calendar_name + "/")
+# client = caldav.DAVClient(pw.url)
+    principal = client.principal()
 calendars = principal.calendars()
-test = create_new_calendar(principal, "Test")
-insert_event(test)
+# print(calendars)
 
+# def add_reminder(dtstart, dtend, dtstamp, summary, )
+
+
+# cal, dtstart, dtend, dtstamp = today, summary = "Test", publisher = "me", method = "PUBLISH", location = None, description = None, rrule = {'FREQ': 'YEARLY'}
 if len(calendars) > 0:
+
     calendar = calendars[0]
-    events = calendar.date_search(today, datetime.combine(today, time(23, 59, 59, 59)))
 
-    if len(events) == 0:
-        print("No events today!")
-    else:
-        print("Total {num_events} events:".format(num_events=len(events)))
-
-        for event in events:
-            event.load()
-            e = event.instance.vevent
-            if e.dtstart.value.strftime("%H:%M") == "00:00":
-                # This is an "allday" event
-                eventTime = e.dtstart.value.strftime("%D")
-                print("{eventTime} {eventSummary} ({eventLocation})".format(
-                    eventTime=eventTime, eventSummary=e.summary.value, eventLocation=1))
-            else:
-                # This is a "normal" event
-                eventTime = e.dtstart.value.strftime("%H:%M")
-                print("{eventTime} {eventSummary} ({eventLocation})".format(
-                    eventTime=eventTime, eventSummary=e.summary.value, eventLocation=1))
+    insert_event(calendar, datetime(2022, 4, 15, 0, 0, 1), datetime(
+        2022, 4, 15, 8, 0, 1), datetime(2022, 4, 14, 4, 0, 1), summary="Hello")
