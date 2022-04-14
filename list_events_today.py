@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta, time
 import caldav
+from helpers import *
+from pw import url
 
 # Variables
-with open("pw.txt", "r") as f:
-    url = f.read()
+
+print(url)
 
 today = datetime.combine(datetime.today(), time(0, 0))
 

@@ -1,16 +1,19 @@
+
 from datetime import datetime, timedelta, time
 import caldav
+from helpers import *
+from pw import url
 
 # Variables
-with open("pw.txt", "r") as f:
-    url = f.read()
-
 today = datetime.combine(datetime.today(), time(0, 0))
 
 # Main
+# client = caldav.DAVClient(url=url, username=username, password=password)
 client = caldav.DAVClient(url)
 principal = client.principal()
 calendars = principal.calendars()
+test = create_new_calendar(principal, "Test")
+insert_event(test)
 
 if len(calendars) > 0:
     calendar = calendars[0]
