@@ -34,5 +34,5 @@ if len(calendars) > 0:
 
     calendar = calendars[0]
 
-    insert_event(calendar, datetime(2022, 4, 15, 0, 0, 1), datetime(
-        2022, 4, 15, 8, 0, 1), datetime(2022, 4, 14, 4, 0, 1), summary="Hello")
+    insert_event(calendar, True, datetime(2022, 4, 15, 2, 0, 1), datetime(
+        2022, 4, 15, 8, 0, 1), datetime(2022, 4, 15, 0, 0, 1), summary="test")

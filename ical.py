@@ -9,14 +9,49 @@ DESCRIPTION:{description}
 CLASS:{cls}
 DTSTART:{start}
 DTEND:{end}
-DTSTAMP:{stamp}
+DTSTAMP:{stamp}{ALARM}
 END:VEVENT
 END:VCALENDAR"""
 
+alarmstr = """
+BEGIN:VALARM
+{trigger}{repeat}
+DURATION:PT15M
+ACTION:DISPLAY
+{alarm_description}
+END:VALARM
+"""
 
-def fill_icalstr(start, end, stamp, summary, publisher, method="PUBLISH", location=None, description=None, cls="PUBLIC", rule=None):
+
+def fill_alarmstr(isalarm, trigger, repeat=None, alarm_description=None):
+    """
+    Fills alarmstr with alarm information.
+    @param isalarm: bool if there should be a alarm.
+    @param trigger: Time of trigger
+    @param repeat: repitition of alarm
+    @param alarm_description: description of alarm
+    """
+
+    if repeat:
+        repeat = "\nREPEAT:" + repeat
+    else:
+        repeat = ""
+    if alarm_description:
+        alarm_description = "\nDESCRIPTION:" + alarm_description
+    if isalarm:
+        alertstr = alarmstr.format(trigger=trigger,
+                                   repeat=repeat,
+                                   alarm_description=alarm_description
+                                   )
+    else:
+        return ""
+    return alertstr
+
+
+def fill_icalstr(isalarm, start, end, stamp, summary, publisher, method="PUBLISH", location=None, description=None, cls="PUBLIC", rule=None, al_trig=None, al_rep="", al_desc=None):
     """
     Fills icalstr with event information.
+    @param isalarm: bool if there should be a alarm.
     @param start: start time of event
     @param end: end time of event
     @param stamp: timestamp of publication
@@ -37,6 +72,8 @@ def fill_icalstr(start, end, stamp, summary, publisher, method="PUBLISH", locati
         description = ""
     if not location:
         location = ""
+    if isalarm:
+        alarm = fill_alarmstr(al_trig, al_rep, al_desc)
 
     finalstr = icalstr.format(
         publisher=publisher,
@@ -47,6 +84,7 @@ def fill_icalstr(start, end, stamp, summary, publisher, method="PUBLISH", locati
         start=start,
         end=end,
         stamp=stamp,
+        ALARM=alarm,
         rrule=rrule)
     return finalstr
 
