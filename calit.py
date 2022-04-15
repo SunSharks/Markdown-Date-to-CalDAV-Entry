@@ -26,8 +26,9 @@ class calit:
             2022, 4, 15, 8, 0, 1), datetime(2022, 4, 15, 0, 0, 1))
 
     def get_md_info(self):
-        with open('testcalit.md', 'r') as f:
+        with open('calit_test.md', 'r') as f:
             self.cmdmd = markdown.markdown(f.read())
+            print(self.cmdmd)
 
 
 calit()
