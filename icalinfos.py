@@ -44,9 +44,16 @@ class icalinfos:
                 if i.startswith(SUMMARY_KW):
                     self.summary = ilst[1].strip()
                 elif i.startswith(BEGIN_KW):
-                    self.begin = self.translate_md_timestamps_to_datetime(ilst[1].strip())
+                    try:
+                        self.begin = self.translate_md_timestamps_to_datetime(ilst[1].strip())
+                        print(self.begin)
+                    except:
+                        return False
                 elif i.startswith(END_KW):
-                    self.end = self.translate_md_timestamps_to_datetime(ilst[1].strip())
+                    try:
+                        self.end = self.translate_md_timestamps_to_datetime(ilst[1].strip())
+                    except:
+                        return False
                 elif i.startswith(LOCATION_KW):
                     self.location = ilst[1].strip()
                 elif i.startswith(DESCRIPTION_KW):
@@ -71,6 +78,7 @@ class icalinfos:
                     self.repeat = ilst[1].strip()  # TODO
                 elif i.startswith(ALARM_DESCRIPTION_KW):
                     self.alarm_desc = ilst[1].strip()
+        return True
 
     def translate_md_timestamps_to_datetime(self, timestr):
         datelst = timestr.split(TIME_SPLIT)

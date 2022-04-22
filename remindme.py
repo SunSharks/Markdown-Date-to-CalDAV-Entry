@@ -32,10 +32,13 @@ class remindme:
 
     def run(self):
         for f in self.searcher.searchables:
-            self.info.get_md_info(self.searcher.searchables[f])
-            self.helper.set_infos(self.info)
-            if f != "/home/lyse/Nextcloud/obsidian/zeugs/Templates/REMINDME.md":
-                self.helper.insert_event()
+            suc = self.info.get_md_info(self.searcher.searchables[f])
+            print(suc)
+            if suc:
+                print("ja")
+                self.helper.set_infos(self.info)
+                if f != "/home/lyse/Nextcloud/obsidian/zeugs/Templates/REMINDME.md":
+                    self.helper.insert_event()
             # try:
             #     self.helper.insert_event()
             # except:

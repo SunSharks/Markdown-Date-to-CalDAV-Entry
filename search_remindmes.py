@@ -7,7 +7,7 @@ set_last_run()
 
 class search_remindmes:
     def __init__(self, search_whole_dir=False):
-        self.lastrun = datetime(2022, 4, 21, 1, 1, 1)  # get_last_run()
+        self.lastrun = datetime(2022, 4, 22, 1, 1, 1)  # get_last_run()
         self.searchables = {}
         self.search_whole_dir = search_whole_dir
 
