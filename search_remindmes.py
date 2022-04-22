@@ -17,9 +17,10 @@ for path, subdirs, files in os.walk(search_path):
         full_path = os.path.join(path, name)
         print(name)
         if get_last_edit_date(full_path) < last_run:
-            with open(full_path, 'r') as f:
-                l = f.readlines()
-                print(l)
-                break
+            if full_path.endswith(".md"):
+                with open(full_path, 'r') as f:
+                    l = f.readlines()
+                    print(l)
+                    break
 
 # print(os.listdir(search_path))
