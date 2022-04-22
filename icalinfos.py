@@ -34,10 +34,8 @@ class icalinfos:
         self.method = "PUBLISH"
         self.cls = "PUBLIC"  # "PRIVATE"
 
-    def get_md_info(self, file='remindme_test.md'):
-        with open(file, 'r') as f:
-            self.cmdstr = markdown.markdown(f.read())
-        cmdlst = self.cmdstr.split("\n")
+    def get_md_info(self, md):
+        cmdlst = md.split("\n")
         for i in cmdlst:
             i = i.strip()
             if ":" in i:

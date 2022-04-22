@@ -3,6 +3,7 @@ import caldav
 from ical_helpers import ical_helpers
 from icalinfos import icalinfos
 import pw
+from search_remindmes import search_remindmes
 
 
 class remindme:
@@ -19,12 +20,30 @@ class remindme:
 # cal, dtstart, dtend, dtstamp = today, summary = "Test", publisher = "me", method = "PUBLISH", location = None, description = None, rrule = {'FREQ': 'YEARLY'}
         if len(self.calendars) > 0 and not new_calendar:
             self.calendar = self.calendars[0]
+
+        self.set_helper()
+        self.searcher = search_remindmes()
+        self.searcher.walk()
+        self.run()
+
+    def set_helper(self):
         self.helper = ical_helpers(self.principal, self.calendar)
         self.info = icalinfos(self.helper)
-        self.info.get_md_info(file="calit_test.md")
+
+    def run(self):
+        for f in self.searcher.searchables:
+            self.info.get_md_info(self.searcher.searchables[f])
+            self.helper.set_infos(self.info)
+            if f != "/home/lyse/Nextcloud/obsidian/zeugs/Templates/REMINDME.md":
+                self.helper.insert_event()
+            # try:
+            #     self.helper.insert_event()
+            # except:
+            #     print("could not create event")  # TODO
+
+    def process_file(self, file):
+        self.info.get_md_info(file=file)
         self.helper.set_infos(self.info)
-        self.helper.insert_event()
-# tstart, dtend, summary="Test", publisher="me", method="PUBLISH", location=None, description=None, cls="PUBLIC", rrule={'FREQ': 'YEARLY'},  al_trig=None, al_rep=None, al_desc=""
 
 
 remindme()
